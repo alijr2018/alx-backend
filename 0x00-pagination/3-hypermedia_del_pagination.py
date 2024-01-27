@@ -5,7 +5,7 @@
 
 import csv
 import math
-from typing import List
+from typing import List, Dict
 
 
 class Server:
@@ -48,21 +48,28 @@ class Server:
         assert index is None or (
             isinstance(index, int) and 0 <= index < len(self.indexed_dataset())
             ), "Index out of range"
-        
-        assert isinstance(page_size, int) and page_size > 0, "Page size must be a positive integer"
+
+        assert isinstance(page_size, int) and page_size > 0, (
+            "Page size must be a positive integer")
 
         index = index if index is not None else 0
 
         next_index = index + page_size
 
-        data = [self.indexed_dataset()[i] for i in range(index, min(next_index, len(self.indexed_dataset())))]
-        
+        data_indices = range(
+            index, min(next_index, len(self.indexed_dataset())))
+        filtered_indices = [
+            i for i in data_indices if i in self.indexed_dataset()]
+        data = [self.indexed_dataset()[i] for i in filtered_indices]
+
         return {
             'index': index,
             'data': data,
             'page_size': page_size,
-            'next_index': next_index if next_index < len(self.indexed_dataset()) else None
+            'next_index': next_index if next_index < len(
+                self.indexed_dataset()) else None
         }
+
 
 if __name__ == "__main__":
     server = Server()
@@ -72,7 +79,7 @@ if __name__ == "__main__":
     try:
         server.get_hyper_index(300000, 100)
     except AssertionError:
-        print("AssertionError raised when out of range")        
+        print("AssertionError raised when out of range")
 
     index = 3
     page_size = 2
