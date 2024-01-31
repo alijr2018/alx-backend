@@ -38,6 +38,6 @@ class LRUCache(BaseCaching):
         Get an items from the cache
         """
         if key is not None and key in self.cache_data:
-            self.lru_tracker[key] = datetime.now()
+            self.lru_tracker.move_to_end(key)
             return self.cache_data[key]
         return None
