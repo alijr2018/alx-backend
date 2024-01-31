@@ -26,11 +26,13 @@ class MRUCache(BaseCaching):
         Add item to the cache
         """
         if key is not None and item is not None:
-            if len(self.cache_data) >= BaseCaching.MAX_ITEMS:
-                mru_key = next(iter(self.mru_tracker))
+            if key in self.cache_data:
+                self.mru_tracker.move_to_end(key)
+            elif len(self.cache_data) >= BaseCaching.MAX_ITEMS:
+                mru_key, _ = self.mru_tracker.popitem(last=False)
                 del self.cache_data[mru_key]
-                del self.mru_tracker[mru_key]
                 print("DISCARD:", mru_key)
+
             self.cache_data[key] = item
             self.mru_tracker[key] = datetime.now()
 
