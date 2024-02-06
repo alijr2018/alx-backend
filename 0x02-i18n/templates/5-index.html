@@ -7,6 +7,7 @@
 </head>
 <body>
     <div>
+        <h1>{{ _('home_header') }}</h1>
         <p>
             {% if g.user %}
                 {{ _('logged_in_as', username=g.user['name']) }}

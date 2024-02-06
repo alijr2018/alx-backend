@@ -21,15 +21,19 @@ def get_user(user_id):
 @app.before_request
 def before_request():
     user_id = int(request.args.get('login_as', 0))
-
     g.user = get_user(user_id)
+    print(f"before_request - User ID: {user_id}, User: {g.user}")
 
 app.config['BABEL_DEFAULT_LOCALE'] = 'en'
 app.config['BABEL_SUPPORTED_LOCALES'] = ['en', 'fr']
 
 @babel.localeselector
 def get_locale():
-    return g.user['locale'] if g.user and g.user['locale'] in app.config['BABEL_SUPPORTED_LOCALES'] else app.config['BABEL_DEFAULT_LOCALE']
+    if g.user and g.user['locale'] in app.config['BABEL_SUPPORTED_LOCALES']:
+        print(f"get_locale - User Locale: {g.user['locale']}")
+        return g.user['locale']
+    print("get_locale - Default Locale")
+    return app.config['BABEL_DEFAULT_LOCALE']
 
 @app.route('/')
 def home():
