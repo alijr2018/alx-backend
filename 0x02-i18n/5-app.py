@@ -18,6 +18,10 @@ users = {
 
 @app.before_request
 def before_request():
+    """
+    function and use the app.before_request,
+    decorator to make it be executed before al
+    """
     user_id = int(request.args.get('login_as', 0))
 
     g.user = users.get(user_id, None)
@@ -29,13 +33,19 @@ app.config['BABEL_SUPPORTED_LOCALES'] = ['en', 'fr']
 
 @babel.localeselector
 def get_locale():
+    """
+    get language form local
+    """
     if g.user and g.user['locale'] in app.config['BABEL_SUPPORTED_LOCALES']:
         return g.user['locale']
     return app.config['BABEL_DEFAULT_LOCALE']
 
 
 @app.route('/')
-def home():
+def index():
+    """
+    render templates
+    """
     return render_template('5-index.html')
 
 
