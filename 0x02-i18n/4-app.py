@@ -27,7 +27,7 @@ def get_locale():
 
 
 @app.route('/')
-def home():
+def index():
     """
     render templates
     """
