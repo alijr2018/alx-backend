@@ -18,7 +18,7 @@ users = {
 
 
 @babel.timezoneselector
-def get_timezone():
+def get_timezone() ->str:
     """
     get timezone
     """
