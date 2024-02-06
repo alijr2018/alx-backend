@@ -22,8 +22,7 @@ def get_locale():
     if req_local and req_local in app.config['BABEL_SUPPORTED_LOCALES']:
         return req_local
     else:
-        return request.accept_languages.best_match(app.config
-                                                   ['BABEL_SUPPORTED_LOCALES'])
+        return request.accept_languages.best_match(app.config['BABEL_SUPPORTED_LOCALES'])
 
 
 @app.route('/')
