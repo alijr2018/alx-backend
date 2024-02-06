@@ -5,11 +5,6 @@
 from flask import Flask, render_template, request
 from flask_babel import Babel, _
 
-app = Flask(__name__)
-babel = Babel(app)
-
-app.config['BABEL_DEFAULT_LOCALE'] = 'en'
-app.config['BABEL_SUPPORTED_LOCALES'] = ['en', 'fr']
 
 
 @babel.localeselector
@@ -33,6 +28,12 @@ def index():
     """
     return render_template('4-index.html')
 
+
+app = Flask(__name__)
+babel = Babel(app)
+
+app.config['BABEL_DEFAULT_LOCALE'] = 'en'
+app.config['BABEL_SUPPORTED_LOCALES'] = ['en', 'fr']
 
 if __name__ == '__main__':
     app.run(debug=True)
