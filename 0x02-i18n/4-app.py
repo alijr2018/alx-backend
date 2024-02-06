@@ -14,6 +14,9 @@ app.config['BABEL_SUPPORTED_LOCALES'] = ['en', 'fr']
 
 @babel.localeselector
 def get_locale():
+    """
+    get language form local
+    """
     req_local = request.args.get('locale')
 
     if req_local and req_local in app.config['BABEL_SUPPORTED_LOCALES']:
@@ -25,6 +28,9 @@ def get_locale():
 
 @app.route('/')
 def home():
+    """
+    render templates
+    """
     return render_template('4-index.html')
 
 
