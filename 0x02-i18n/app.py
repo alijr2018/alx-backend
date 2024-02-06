@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """
-7-app.py
+app.py
 """
 from flask import Flask, render_template, g, request
 from flask_babel import Babel, _
+
 import pytz
 import datetime
 
@@ -17,11 +18,10 @@ users = {
     4: {"name": "Teletubby", "locale": None, "timezone": "Europe/London"},
 }
 
-
 @babel.timezoneselector
 def get_timezone():
     """
-    get timezone
+    Get the user's timezone.
     """
     url_timezone = request.args.get('timezone')
     if url_timezone:
@@ -31,41 +31,32 @@ def get_timezone():
         except pytz.UnknownTimeZoneError:
             pass
 
-    if g.user and g.user['timezone']:
-        try:
-            pytz.timezone(g.user['timezone'])
-            return g.user['timezone']
-        except pytz.UnknownTimeZoneError:
-            pass
+    if g.user and g.user.get('timezone'):
+        return g.user['timezone']
 
     return 'UTC'
-
 
 @app.before_request
 def before_request():
     """
-    function and use the app.before_request,
-    decorator to make it be executed before al
+    Function to be executed before handling each request.
     """
     user_id = int(request.args.get('login_as', 0))
-
     g.user = users.get(user_id, None)
-
 
 app.config['BABEL_DEFAULT_LOCALE'] = 'en'
 app.config['BABEL_SUPPORTED_LOCALES'] = ['en', 'fr']
 
-
 @babel.localeselector
 def get_locale():
     """
-    get language form local
+    Get the user's preferred locale.
     """
     url_locale = request.args.get('locale')
     if url_locale and url_locale in app.config['BABEL_SUPPORTED_LOCALES']:
         return url_locale
 
-    if g.user and g.user['locale'] in app.config['BABEL_SUPPORTED_LOCALES']:
+    if g.user and g.user.get('locale'):
         return g.user['locale']
 
     header_locale = request.headers.get('Accept-Language')
@@ -76,17 +67,16 @@ def get_locale():
 
     return app.config['BABEL_DEFAULT_LOCALE']
 
-
 @app.route('/')
 def index():
     """
-    render templates
+    Render the index template with the current time.
     """
-    current_time = datetime.datetime.now(
-        pytz.timezone(get_timezone())).strftime("%b %d, %Y, %I:%M:%S %p")
+    user_timezone = get_timezone()
+    current_time_user = datetime.datetime.now(pytz.timezone(user_timezone))
 
+    current_time = current_time_user.strftime("%b %d, %Y, %I:%M:%S %p")
     return render_template('index.html', current_time=current_time)
-
 
 if __name__ == '__main__':
     app.run(debug=True)
