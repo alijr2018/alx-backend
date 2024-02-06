@@ -13,7 +13,7 @@ app.config['BABEL_SUPPORTED_LOCALES'] = ['en', 'fr']
 
 
 @babel.localeselector
-def get_locale() -> str:
+def get_locale():
     """
     get language form local
     """
@@ -27,7 +27,7 @@ def get_locale() -> str:
 
 
 @app.route('/')
-def home() -> str:
+def home():
     """
     render templates
     """
